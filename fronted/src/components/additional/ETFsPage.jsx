@@ -16,7 +16,7 @@ export default function ETFsPage() {
 
   const fetchETFs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/etfs/sant");
+      const res = await axios.get("https://demo-stock-market-backend.onrender.com/etfs/sant");
       const mixed = mixPosNeg(res.data.etfs); // MIXED POS+NEG
       setEtfs(res.data.etfs);
       setFiltered(mixed);
