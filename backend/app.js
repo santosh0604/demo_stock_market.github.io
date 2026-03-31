@@ -33,7 +33,7 @@ require('./config/passport')(passport);
 // <-- Use your custom CORS options globally
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://demo-stock-market-frontend.onrender.com",
     credentials: true,
   })
 );
