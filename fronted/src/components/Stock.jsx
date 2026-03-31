@@ -25,8 +25,8 @@ const Stock = ({ setStockForOrderBox }) => {
     const fetchData = async () => {
       try {
         const [rapidRes, nseRes] = await Promise.allSettled([
-          axios.get(`http://localhost:5000/stock/${name}`),
-          axios.get(`http://localhost:5000/nse/${name}`),
+          axios.get(`https://demo-stock-market-backend.onrender.com/stock/${name}`),
+          axios.get(`https://demo-stock-market-backend.onrender.com/nse/${name}`),
         ]);
         if (rapidRes.status === "fulfilled") setStock(rapidRes.value.data);
         if (nseRes.status === "fulfilled") setNseData(nseRes.value.data);
