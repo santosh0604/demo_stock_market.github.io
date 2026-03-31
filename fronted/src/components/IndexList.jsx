@@ -65,7 +65,7 @@ export default function IndexList() {
 
       for (const idx of indices) {
         try {
-          const res = await axios.get(`http://localhost:5000/${idx.key}`);
+          const res = await axios.get(`https://demo-stock-market-backend.onrender.com/${idx.key}`);
           results[idx.key] = res.data?.data?.[0] || null;
         } catch (err) {
           console.log("Failed:", idx.key);
