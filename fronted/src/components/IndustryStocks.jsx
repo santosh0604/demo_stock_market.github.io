@@ -220,7 +220,7 @@ export default function IndustryStocks() {
   const [stocks, setStocks] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "https://demo-stock-market-backend.onrender.com";
 
   const sectors = [
     "AUTO",
