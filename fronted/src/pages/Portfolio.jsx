@@ -73,7 +73,7 @@ export default function Portfolio() {
   const fetchOrders = async () => {
     if (!user?._id) return;
     try {
-      const res = await axios.get(`http://localhost:5000/orders/${user._id}`);
+      const res = await axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`);
       const ordersData = res.data.orders || [];
       setOrders(ordersData);
       const map = {};
@@ -134,7 +134,7 @@ export default function Portfolio() {
     try {
       const symbols = holdingsData.map(h => h.symbol);
       if (symbols.length === 0) return;
-      const res = await axios.post(`http://localhost:5000/live-prices`, { symbols });
+      const res = await axios.post(`https://demo-stock-market-backend.onrender.com/live-prices`, { symbols });
       const prices = res.data.prices || {};
       const changes = res.data.changes || {};
       const yesterdayCloses = res.data.yesterdayCloses || {};
@@ -178,7 +178,7 @@ export default function Portfolio() {
     setModifyPriceType("limit");
     setShowModifyModal(true);
     try {
-      const pricesRes = await axios.post("http://localhost:5000/live-prices", { symbols: [order.symbol] });
+      const pricesRes = await axios.post("https://demo-stock-market-backend.onrender.com/live-prices", { symbols: [order.symbol] });
       if (pricesRes.data.success && pricesRes.data.prices && pricesRes.data.prices[order.symbol]) {
         setModifyMarketPrice(pricesRes.data.prices[order.symbol].toString());
       }
@@ -201,7 +201,7 @@ export default function Portfolio() {
     }
     setModifyLoading(true);
     try {
-      const res = await axios.put(`http://localhost:5000/modify-order/${selectedOrder._id}`, {
+      const res = await axios.put(`https://demo-stock-market-backend.onrender.com/modify-order/${selectedOrder._id}`, {
         userId: user._id,
         newQty: Number(modifyQty),
         newLimitPrice: Number(priceToUse),
@@ -209,7 +209,7 @@ export default function Portfolio() {
       });
       setModifyOrderMessage("Order modified successfully!");
       setTimeout(() => setModifyOrderMessage(""), 2000);
-      const ordersRes = await axios.get(`http://localhost:5000/orders/${user._id}`);
+      const ordersRes = await axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`);
       setOrders(ordersRes.data.orders);
       if (res.data && res.data.balance !== undefined) {
         setUser({ ...user, balance: res.data.balance });
@@ -386,7 +386,7 @@ export default function Portfolio() {
                                   <button className="btn btn-sm btn-danger" onClick={async () => {
                                     if (!window.confirm('Cancel this order?')) return;
                                     try {
-                                      const res = await axios.delete(`http://localhost:5000/cancel-order/${o._id}`, { data: { userId: user._id } });
+                                      const res = await axios.delete(`https://demo-stock-market-backend.onrender.com/cancel-order/${o._id}`, { data: { userId: user._id } });
                                       alert(res.data.message || 'Order cancelled');
                                       const ordersRes = await axios.get(`http://localhost:5000/orders/${user._id}`);
                                       setOrders(ordersRes.data.orders);
@@ -536,9 +536,9 @@ export default function Portfolio() {
                               <button className="btn btn-sm btn-danger flex-grow-1" onClick={async () => {
                                 if (!window.confirm('Cancel this order?')) return;
                                 try {
-                                  const res = await axios.delete(`http://localhost:5000/cancel-order/${o._id}`, { data: { userId: user._id } });
+                                  const res = await axios.delete(`https://demo-stock-market-backend.onrender.com/cancel-order/${o._id}`, { data: { userId: user._id } });
                                   alert(res.data.message || 'Order cancelled');
-                                  const ordersRes = await axios.get(`http://localhost:5000/orders/${user._id}`);
+                                  const ordersRes = await axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`);
                                   setOrders(ordersRes.data.orders);
                                   if (res.data && res.data.balance !== undefined) setUser({ ...user, balance: res.data.balance });
                                 } catch (err) {
