@@ -41,7 +41,7 @@ const MainContent = ({ user }) => {
         return;
       }
       try {
-        const res = await axios.get(`http://localhost:5000/orders/${user._id}`);
+        const res = await axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`);
         const ordersData = res.data.orders || [];
         // Calculate holdings from completed orders
         const map = {};
@@ -84,7 +84,7 @@ const MainContent = ({ user }) => {
         // Fetch live prices
         if (finalHoldings.length > 0) {
           const symbols = finalHoldings.map((h) => h.symbol);
-          const res2 = await axios.post(`http://localhost:5000/live-prices`, { symbols });
+          const res2 = await axios.post(`https://demo-stock-market-backend.onrender.com/live-prices`, { symbols });
           const prices = res2.data.prices || {};
           const changes = res2.data.changes || {};
           const yesterdayCloses = res2.data.yesterdayCloses || {};
@@ -127,13 +127,13 @@ const MainContent = ({ user }) => {
         try {
           let res;
           if (key === "sensex") {
-            res = await axios.get("http://localhost:5000/bse/sensex");
+            res = await axios.get("https://demo-stock-market-backend.onrender.com/bse/sensex");
             results[key] = res.data?.data?.[0] || null;
           } else if (key === "nifty50") {
-            res = await axios.get(`http://localhost:5000/${key}`);
+            res = await axios.get(`https://demo-stock-market-backend.onrender.com/${key}`);
             results[key] = res.data?.data || [];
           } else {
-            res = await axios.get(`http://localhost:5000/${key}`);
+            res = await axios.get(`https://demo-stock-market-backend.onrender.com/${key}`);
             results[key] = res.data?.data?.[0] || null;
           }
         } catch (err) {
@@ -155,7 +155,7 @@ const MainContent = ({ user }) => {
     if (!user?._id) return;
     const fetchWatchlists = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/watchlists?userId=${user._id}`);
+        const res = await axios.get(`https://demo-stock-market-backend.onrender.com/api/watchlists?userId=${user._id}`);
         if (Array.isArray(res.data) && res.data.length > 0) {
           setAllWatchlists(res.data);
           // Show only the first watchlist's stocks by default
@@ -188,7 +188,7 @@ const MainContent = ({ user }) => {
         if (wl && Array.isArray(wl.stocks) && wl.stocks.length > 0) {
           const symbols = wl.stocks.map(s => s.symbol);
           try {
-            const res = await axios.post("http://localhost:5000/live-prices", { symbols });
+            const res = await axios.post("https://demo-stock-market-backend.onrender.com/live-prices", { symbols });
             const prices = res.data.prices || {};
             const changes = res.data.changes || {};
             const yesterdayCloses = res.data.yesterdayCloses || {};
