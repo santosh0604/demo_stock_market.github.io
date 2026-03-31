@@ -162,7 +162,7 @@ export default function MutualFundDetail() {
 
   const fetchAllFunds = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/mutual-funds/qqq");
+      const res = await axios.get("https://demo-stock-market-backend.onrender.com/mutual-funds/qqq");
       const flatFunds = flattenFunds(res.data);
       console.log(flatFunds);
       setFunds(flatFunds);
@@ -182,7 +182,7 @@ export default function MutualFundDetail() {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/mutual-fund-search/qqq?query=${query}`
+        `https://demo-stock-market-backend.onrender.com/mutual-fund-search/qqq?query=${query}`
       );
 
       const flatFunds = flattenFunds(res.data);
@@ -228,7 +228,7 @@ export default function MutualFundDetail() {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/mutual-fund-search/qqq?query=${letter}`
+        `https://demo-stock-market-backend.onrender.com/mutual-fund-search/qqq?query=${letter}`
       );
 
       const flatFunds = flattenFunds(res.data);
