@@ -6,7 +6,7 @@ export default function Trending() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/trending/most")
+    axios.get("https://demo-stock-market-backend.onrender.com/trending/most")
       .then(res => {
         console.log("Frontend Response:", res.data);
 
