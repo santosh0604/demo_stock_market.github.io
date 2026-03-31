@@ -183,7 +183,7 @@ export default function Transaction() {
     const fetchCompletedOrders = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:5000/orders/${user._id}`);
+        const res = await axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`);
         const ordersData = res.data.orders || [];
         const completed = ordersData
           .filter((o) => o.status === "COMPLETED")
