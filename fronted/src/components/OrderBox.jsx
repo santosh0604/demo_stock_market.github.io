@@ -24,7 +24,7 @@ const OrderBox = ({ stock }) => {
     const loadHoldings = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/portfolio/holdings/${user._id}/${stock.symbol}`
+          `https://demo-stock-market-backend.onrender.com/portfolio/holdings/${user._id}/${stock.symbol}`
         );
 
         setUserHoldings(res.data.quantity || 0);
@@ -110,7 +110,7 @@ const OrderBox = ({ stock }) => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/place/order", payload);
+      const res = await axios.post("https://demo-stock-market-backend.onrender.com/place/order", payload);
       setOrderMessage("✅ Order placed successfully!");
       setTimeout(() => setOrderMessage(""), 2000);
       // update user's balance in context if backend returned it
