@@ -19,7 +19,7 @@ const Nominee = () => {
     const fetchNominee = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/my", {
+        const res = await axios.get("https://demo-stock-market-backend.onrender.com/my", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data.length > 0) {
