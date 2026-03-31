@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:5000/profile", {
+        const res = await axios.get("https://demo-stock-market-backend.onrender.com/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
