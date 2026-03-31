@@ -207,7 +207,7 @@ export default function TopGainers({ cardStyle, compact }) {
 
     const fetchGainers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/top-gainers");
+        const res = await axios.get("https://demo-stock-market-backend.onrender.com/api/top-gainers");
         const data = res.data;
 
         if (data.legends && data.legends.length > 0) {
