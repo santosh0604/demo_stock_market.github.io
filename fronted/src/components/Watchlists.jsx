@@ -25,7 +25,7 @@ export default function Watchlists({ user }) {
   const fetchWatchlists = async () => {
     try {
       if (!user?._id) return;
-      const res = await axios.get(`http://localhost:5000/api/watchlists?userId=${user._id}`);
+      const res = await axios.get(`https://demo-stock-market-backend.onrender.com/api/watchlists?userId=${user._id}`);
       setWatchlists(res.data);
       if (!selectedWatchlist && res.data.length > 0) {
         const first = res.data[0];
@@ -55,7 +55,7 @@ export default function Watchlists({ user }) {
           // Get symbols from selected watchlist
           const symbols = selectedWatchlist.stocks.map(s => s.symbol);
           // Fetch live prices from backend (not rapid API)
-          const res = await axios.post("http://localhost:5000/live-prices", { symbols });
+          const res = await axios.post("https://demo-stock-market-backend.onrender.com/live-prices", { symbols });
           const prices = res.data.prices || {};
           const changes = res.data.changes || {};
           const yesterdayCloses = res.data.yesterdayCloses || {};
@@ -96,7 +96,7 @@ export default function Watchlists({ user }) {
   const createWatchlist = async () => {
     if (!newWatchlistName.trim()) return alert("Enter a name for the watchlist!");
     try {
-      await axios.post("http://localhost:5000/api/watchlists", {
+      await axios.post("https://demo-stock-market-backend.onrender.com/api/watchlists", {
         name: newWatchlistName,
         userId: user._id,
       });
@@ -111,7 +111,7 @@ export default function Watchlists({ user }) {
   const deleteWatchlist = async (id) => {
     if (!window.confirm("Are you sure you want to delete this watchlist?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/watchlists/${id}`);
+      await axios.delete(`https://demo-stock-market-backend.onrender.com/api/watchlists/${id}`);
       setSelectedWatchlist((prev) => (prev && prev._id === id ? null : prev));
       fetchWatchlists();
     } catch (err) {
@@ -123,12 +123,12 @@ export default function Watchlists({ user }) {
   const addStockToWatchlist = async () => {
     if (!symbolInput.trim() || !selectedWatchlist) return;
     try {
-      await axios.post(`http://localhost:5000/api/watchlists/${selectedWatchlist._id}/stocks`, {
+      await axios.post(`https://demo-stock-market-backend.onrender.com/api/watchlists/${selectedWatchlist._id}/stocks`, {
         symbol: symbolInput,
       });
       setSymbolInput("");
       // Fetch the updated watchlist from backend (single watchlist)
-      const res = await axios.get(`http://localhost:5000/api/watchlists/${selectedWatchlist._id}`);
+      const res = await axios.get(`https://demo-stock-market-backend.onrender.com/api/watchlists/${selectedWatchlist._id}`);
       const updatedWatchlist = res.data;
       setSelectedWatchlist(updatedWatchlist);
       setWatchlists(prev => prev.map(wl => wl._id === updatedWatchlist._id ? updatedWatchlist : wl));
@@ -145,7 +145,7 @@ export default function Watchlists({ user }) {
     if (!window.confirm(`Delete ${symbol} from this watchlist?`)) return;
     try {
       await axios.delete(
-        `http://localhost:5000/api/watchlists/${selectedWatchlist._id}/stocks/${symbol}`
+        `https://demo-stock-market-backend.onrender.com/api/watchlists/${selectedWatchlist._id}/stocks/${symbol}`
       );
       fetchWatchlists();
     } catch (err) {
