@@ -8,7 +8,7 @@ export default function CompanyToSymbol() {
   const [error, setError] = useState("");
   const [details, setDetails] = useState(null);
 
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "https://demo-stock-market-backend.onrender.com";
 
   // Convert company name to symbol
   const handleConvert = async () => {
