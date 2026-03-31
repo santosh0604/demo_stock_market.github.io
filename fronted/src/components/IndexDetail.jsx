@@ -602,7 +602,7 @@ export default function IndexDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/${symbol}`);
+        const res = await axios.get(`https://demo-stock-market-backend.onrender.com/${symbol}`);
         setData(res.data);
       } catch (err) {
         console.error(err);
