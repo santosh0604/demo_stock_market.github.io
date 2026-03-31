@@ -27,7 +27,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/register", formData, {
+      await axios.post("https://demo-stock-market-backend.onrender.com/register", formData, {
         headers: { "Content-Type": "application/json" },
       });
       setMessage("✅ Registered successfully!");
