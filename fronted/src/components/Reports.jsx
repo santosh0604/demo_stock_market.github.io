@@ -26,7 +26,7 @@ export default function Reports() {
 
   useEffect(() => {
     if (!user?._id) return;
-    axios.get(`http://localhost:5000/orders/${user._id}`)
+    axios.get(`https://demo-stock-market-backend.onrender.com/orders/${user._id}`)
       .then(res => setOrders(res.data.orders || []));
   }, [user]);
 
