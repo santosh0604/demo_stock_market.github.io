@@ -13,7 +13,7 @@ export default function IPOPage() {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("active");
 
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "https://demo-stock-market-backend.onrender.com";
 
   useEffect(() => {
     fetchIPO();
