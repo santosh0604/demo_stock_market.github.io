@@ -21,7 +21,7 @@ useEffect(() => {
     setData([]); // 🔹 Reset old chart data
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/chart?symbol=${encodeURIComponent(symbol)}`
+        `https://demo-stock-market-backend.onrender.com/api/chart?symbol=${encodeURIComponent(symbol)}`
       );
       const chartData = res.data?.chart?.result?.[0];
       if (!chartData) throw new Error("Invalid chart data");
