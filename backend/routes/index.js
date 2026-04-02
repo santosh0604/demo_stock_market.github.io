@@ -112,7 +112,7 @@ router.post("/register", async (req, res) => {
       email,
       password,
       dob,
-      doid,
+ 
       income,
       gender,
       marital_status,
@@ -131,7 +131,7 @@ router.post("/register", async (req, res) => {
       phone_no,
       email,
       dob,
-      doid,
+
       income,
       gender,
       marital_status,
