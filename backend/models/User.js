@@ -28,10 +28,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  doid: {
-    type: Number,
-    require: true,
-  },
+
   income: {
     type: Number,
     required: true,
