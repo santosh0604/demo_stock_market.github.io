@@ -1,37 +1,17 @@
 #!/usr/bin/env node
 
+const app = require('../app');
 const http = require('http');
-const connectDB = require('../config/db');
 
-// ✅ FIX 1: Connect MongoDB FIRST, then start the server.
-// The old code started the server immediately — before DB connected.
-// So the setInterval in index.js fired Order.find() before mongoose was ready → "buffering timed out"
-// ✅ FIX 2: Use process.env.PORT (was hardcoded '3001') — Render requires dynamic PORT
-const startServer = async () => {
-  try {
-    await connectDB(); // wait for MongoDB Atlas
+const port = normalizePort(process.env.PORT || '3001');
+app.set('port', port);
 
-    const app = require('../app'); // require app AFTER DB is ready
+const server = http.createServer(app);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
-    const port = normalizePort(process.env.PORT || '5000');
-    app.set('port', port);
-
-    const server = http.createServer(app);
-    server.listen(port);
-    server.on('error', onError);
-    server.on('listening', () => {
-      const addr = server.address();
-      const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-      console.log('🚀 Server listening on ' + bind);
-    });
-
-  } catch (err) {
-    console.error('❌ Server startup failed:', err.message);
-    process.exit(1);
-  }
-};
-
-startServer();
+// Helpers
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
@@ -42,16 +22,21 @@ function normalizePort(val) {
 
 function onError(error) {
   if (error.syscall !== 'listen') throw error;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
   switch (error.code) {
     case 'EACCES':
-      console.error('Port requires elevated privileges');
+      console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
-      console.error('Port is already in use');
+      console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }
+}
+
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  console.log('Listening on ' + bind);
 }
