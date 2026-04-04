@@ -166,24 +166,19 @@
 
 
 
-
-
-
-
-
+// app.js
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
-const flash = require("connect-flash");
-const cors = require("cors");
+const flash = require('connect-flash');
+const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const WatchlistRoutes = require("./routes/watchlist");
-
-const axios = require('axios');
+const WatchlistRoutes = require('./routes/watchlist');
 
 const app = express();
 
@@ -191,39 +186,43 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ CORS (for frontend connection)
+// ✅ CORS — allow your Render frontend to call this backend
 app.use(
   cors({
-    origin: "https://demo-stock-market-frontend.onrender.com",
+    origin: 'https://demo-stock-market-frontend.onrender.com',
     credentials: true,
   })
 );
 
-// ✅ SESSION (ONLY ONE)
+// ✅ FIX: trust proxy — REQUIRED on Render (sits behind a reverse proxy)
+// Without this, secure cookies don't work even with HTTPS
+app.set('trust proxy', 1);
+
+// ✅ FIX: SESSION — secure + sameSite set correctly for Render (HTTPS)
 app.use(
   session({
-    secret: "yoursecret",
+    secret: process.env.SESSION_SECRET || 'yoursecret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Render uses HTTP internally
+      secure: process.env.NODE_ENV === 'production',       // true on Render (HTTPS)
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' needed for cross-origin on Render
     },
   })
 );
 
-// Passport config
+// ================== PASSPORT ==================
 require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Flash messages
+// ================== FLASH MESSAGES ==================
 app.use(flash());
 app.use((req, res, next) => {
-  res.locals.success_msg = req.flash("success_msg");
-  res.locals.error_msg = req.flash("error_msg");
-  res.locals.error = req.flash("error");
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg   = req.flash('error_msg');
+  res.locals.error       = req.flash('error');
   next();
 });
 
@@ -231,21 +230,21 @@ app.use((req, res, next) => {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Static files
+// ================== STATIC FILES ==================
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
 
 // ================== ROUTES ==================
 app.use('/', indexRouter);
 app.use('/', authRouter);
-app.use("/api/watchlists", WatchlistRoutes);
+app.use('/api/watchlists', WatchlistRoutes);
 
-// ================== API ==================
-app.get("/api/chart", async (req, res) => {
+// ================== CHART API ==================
+app.get('/api/chart', async (req, res) => {
   const { symbol } = req.query;
 
   if (!symbol) {
-    return res.status(400).json({ error: "Symbol is required" });
+    return res.status(400).json({ error: 'Symbol is required' });
   }
 
   try {
@@ -253,48 +252,26 @@ app.get("/api/chart", async (req, res) => {
 
     const response = await axios.get(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0",
-        Accept: "application/json",
+        'User-Agent': 'Mozilla/5.0',
+        Accept: 'application/json',
       },
     });
 
     res.json(response.data);
   } catch (err) {
-    console.error("❌ Yahoo API Error:", err.message);
+    console.error('❌ Yahoo API Error:', err.message);
 
     if (err.response) {
-      res.status(err.response.status).json({
-        error: err.response.data,
-      });
+      res.status(err.response.status).json({ error: err.response.data });
     } else {
-      res.status(500).json({ error: "Failed to fetch chart data" });
+      res.status(500).json({ error: 'Failed to fetch chart data' });
     }
   }
 });
 
-// Avoid favicon error
-app.get("/favicon.ico", (req, res) => res.status(204));
+// Avoid favicon 404 noise in logs
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-// ================== START SERVER AFTER DB ==================
-const startServer = async () => {
-  try {
-    const connectDB = require('./config/db');
-    await connectDB(); // ✅ WAIT for MongoDB
-
-    app.listen(5000, () => {
-      console.log("🚀 Server running on port 5000");
-    });
-
-  } catch (err) {
-    console.error("❌ Server failed to start:", err);
-  }
-};
-
-startServer();
-
+// ✅ FIX: Export app only — do NOT call app.listen() here.
+// bin/www handles the server startup (and now connects DB before listening).
 module.exports = app;
-
-
-
-
-
