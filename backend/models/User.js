@@ -28,10 +28,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-doid: {
-  type: Number,
-  // remove this field OR make it optional
-},
+
   income: {
     type: Number,
     required: true,
