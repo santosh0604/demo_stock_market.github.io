@@ -271,7 +271,7 @@ app.get('/api/chart', async (req, res) => {
 
 // Avoid favicon 404 noise in logs
 app.get('/favicon.ico', (req, res) => res.status(204).end());
-
+app.listen(5000, () => console.log('Server started on http://localhost:3000'));
 // ✅ FIX: Export app only — do NOT call app.listen() here.
 // bin/www handles the server startup (and now connects DB before listening).
 module.exports = app;
